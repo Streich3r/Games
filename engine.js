@@ -13,6 +13,18 @@ function newGame(seed=17){let rng=seed|0;const rand=()=>{rng=(rng*1664525+101390
  const game={version:1,seed,time:0,tiles,base:{x:1,y:6,hp:260,max:260},wallet:{metal:115,crystal:24,coal:80},stock:{ore:0,plate:0,ammo:18,crystal:0,coal:0},points:0,wave:0,nextWave:55,enemies:[],shots:[],builds:{},produced:{ore:0,plate:0,ammo:0},kills:0,storyStep:0,paused:false,over:false,won:false,log:['ARCHIV IVY: Außenposten aktiviert. Errichte eine Produktionskette.']};
  tiles[6*W+1].entity={type:'core',hp:260,dir:0,progress:0,buffer:null};
  placeFree(game,3,6,'generator',0);placeFree(game,4,4,'miner',0); // initial mine on ore
+ // IVY Forge V2: a working starter outpost. Every visible machine is a real
+ // simulation entity: no painted-on fake buildings or non-interactive belts.
+ const starter=[
+  [6,9,'miner',0],[7,9,'belt',0],[8,9,'belt',0],[9,9,'belt',0],
+  [10,9,'smelter',0],[11,9,'belt',0],[12,9,'assembler',0],[13,9,'belt',0],[14,9,'turret',0],
+  [10,3,'miner',0],[11,3,'belt',0],[12,3,'belt',0],[13,3,'generator',0],
+  [7,7,'generator',0],[9,6,'generator',0],[11,6,'turret',0],[12,7,'wall',0],
+  [4,8,'wall',0],[5,8,'wall',0],[9,8,'wall',0]
+ ];
+ starter.forEach(([x,y,type,d])=>placeFree(game,x,y,type,d));
+ // Campaign starts by extending the factory, not paying again for starter equipment.
+ game.log.unshift('IVY FORGE: Produktionsbasis aktiv. Erweitere das bestehende Netz.');
  return game;
 }
 function placeFree(g,x,y,type,dir=0){if(!inBounds(x,y)||at(g,x,y).entity)return false;at(g,x,y).entity={type,dir,progress:0,buffer:null,hp:type==='wall'?90:100};g.builds[type]=(g.builds[type]||0)+1;return true;}
@@ -30,11 +42,11 @@ function receive(entity,item){if(!entity||entity.buffer)return false;
 function forward(t,e){let [dx,dy]=DIRS[e.dir||0];return [t.x+dx,t.y+dy];}
 function send(g,t,e,item){const [x,y]=forward(t,e);if(!inBounds(x,y))return false;return receive(at(g,x,y).entity,item);}
 function stage(g){const total=g.produced; const tasks=[
-  [()=>g.builds.belt>=1,'Förderband errichten'],
-  [()=>g.builds.smelter>=1,'Schmelzofen errichten'],
-  [()=>total.plate>=3,'Drei Metallplatten herstellen'],
-  [()=>g.builds.assembler>=1,'Munitionsfabrik errichten'],
-  [()=>g.builds.turret>=1,'Geschützturm errichten'],
+  [()=>g.builds.belt>=8,'Fördernetz um ein Band erweitern'],
+  [()=>g.builds.smelter>=2,'Zweiten Schmelzofen errichten'],
+  [()=>total.plate>=12,'Zwölf Metallplatten herstellen'],
+  [()=>g.builds.assembler>=2,'Zweite Munitionsfabrik errichten'],
+  [()=>g.builds.turret>=3,'Dritten Geschützturm errichten'],
   [()=>g.wave>=3&&g.base.hp>0,'Drei Angriffswellen überstehen']];
  while(g.storyStep<tasks.length&&tasks[g.storyStep][0]()){g.storyStep++;g.wallet.metal+=14;g.wallet.crystal+=2;g.points+=100;g.log.unshift('KAMPAGNE: Ziel erfüllt! +14 Metall, +2 Kristalle');}
  if(g.storyStep>=tasks.length){g.won=true;}

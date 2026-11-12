@@ -1,1 +1,31 @@
-{"name":"IVY Automation – Outpost","short_name":"IVY Factory","description":"Automatisierung, Förderbänder und Basisverteidigung","start_url":"./","scope":"./","display":"standalone","background_color":"#050812","theme_color":"#080c18","orientation":"any","icons":[{"src":"icon-192.png","sizes":"192x192","type":"image/png","purpose":"any"},{"src":"icon-512.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}]}
+{
+  "name": "IVY FORGE – Automation Outpost",
+  "short_name": "IVY FORGE",
+  "description": "Isometrisches Sci-Fi-Automationsspiel mit Förderbändern und Verteidigung.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0b0e1e",
+  "theme_color": "#101329",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
